@@ -77,9 +77,9 @@
       object-fit: contain;
     }
 
-    .header-right     { text-align: right; }
-    .company-name     { font-size: 20px; font-weight: bold; color: #fff; letter-spacing: 0.02em; }
-    .company-sub      { font-size: 12px; color: rgba(255,255,255,0.70); margin-top: 4px; }
+    .header-right  { text-align: right; }
+    .company-name  { font-size: 20px; font-weight: bold; color: #fff; letter-spacing: 0.02em; }
+    .company-sub   { font-size: 12px; color: rgba(255,255,255,0.70); margin-top: 4px; }
 
     /* ── FRANJA SECUNDARIA ── */
     .subheader {
@@ -106,7 +106,7 @@
       margin-bottom: 18px;
     }
 
-    /* Tabla de datos */
+    /* ── TABLA DATOS GENERALES ── */
     .data-table               { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
     .data-table tr            { border-bottom: 1px solid #ebebeb; }
     .data-table tr:last-child { border-bottom: none; }
@@ -115,7 +115,62 @@
     .data-table td.value      { color: #1a1a1a; font-weight: bold; }
     .data-table td.value.missing { color: #bbb; font-weight: normal; font-style: italic; }
 
-    /* Caja de importe */
+    /* ── TABLA COMPROBANTES CANCELADOS ── */
+    .cancelados-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      font-size: 13px;
+    }
+
+    /* Encabezado de la tabla */
+    .cancelados-table thead tr {
+      background: #25577d;
+    }
+    .cancelados-table thead th {
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      padding: 10px 14px;
+      text-align: left;
+    }
+    .cancelados-table thead th:last-child {
+      text-align: right;
+    }
+    .cancelados-table thead th.num {
+      text-align: right;
+    }
+
+    /* Filas del cuerpo */
+    .cancelados-table tbody tr {
+      border-bottom: 1px solid #ebebeb;
+    }
+    .cancelados-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    .cancelados-table tbody tr:nth-child(even) {
+      background: #f9fbfd;
+    }
+    .cancelados-table tbody td {
+      padding: 10px 14px;
+      color: #1a1a1a;
+    }
+    .cancelados-table tbody td.num {
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Fila vacía (cuando no hay items) */
+    .cancelados-table tbody td.empty {
+      text-align: center;
+      color: #bbb;
+      font-style: italic;
+      padding: 18px 14px;
+    }
+
+    /* ── CAJA IMPORTE ── */
     .importe-row       { display: flex; align-items: stretch; border: 1px solid #d0d0d0; }
     .importe-label-box {
       background: #25577d;
@@ -138,20 +193,6 @@
       display: flex;
       align-items: center;
       background: #f4f8fb;
-    }
-
-    /* Sello */
-    .stamp-row { display: flex; justify-content: flex-end; margin-top: 24px; }
-    .stamp {
-      border: 2px solid #2e9e5b;
-      color: #2e9e5b;
-      font-size: 11px;
-      font-weight: bold;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      padding: 6px 18px;
-      transform: rotate(-2deg);
-      display: inline-block;
     }
 
     /* ── PIE ── */
@@ -194,8 +235,12 @@
 </head>
 <body>
 
+  <div id="aviso-params">
+    ⚠️ Algunos campos no se recibieron en la URL y se muestran como "No especificado".
+    Parámetros esperados: <code>fecha</code>, <code>proveedor</code>, <code>forma</code>, <code>importe</code>, <code>nombre</code>, <code>items</code>.
+  </div>
 
-  <!-- Botón de descarga (no se incluye en el PDF) -->
+  <!-- Botón de descarga -->
   <button class="btn-download" onclick="descargarPDF()">
     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -206,29 +251,25 @@
     Descargar PDF
   </button>
 
-  <!-- ── COMPROBANTE (se convierte en PDF) ── -->
+  <!-- ── COMPROBANTE ── -->
   <div id="comprobante">
 
-    <!-- Encabezado: logo izquierda / empresa derecha -->
     <div class="header">
-      <div class="logo">
-    
-      </div>
+      <div class="logo"></div>
       <div class="header-right">
         <div class="company-name">Andres Arriaga SRL</div>
         <div class="company-sub">CUIT: 30-71516463-5</div>
       </div>
     </div>
 
-    <!-- Franja secundaria -->
     <div class="subheader">
       <span>Comprobante de Pago</span>
       <strong id="subheader-fecha">—</strong>
     </div>
 
-    <!-- Cuerpo -->
     <div class="body">
 
+      <!-- Datos generales -->
       <div class="section-title">Detalle del Pago</div>
 
       <table class="data-table">
@@ -246,20 +287,31 @@
         </tr>
       </table>
 
+      <!-- Comprobantes cancelados -->
+      <div class="section-title">Comprobantes Cancelados</div>
+
+      <table class="cancelados-table">
+        <thead>
+          <tr>
+            <th>Comprobante</th>
+            <th class="num">Importe</th>
+            <th class="num">Saldo</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-cancelados">
+          <!-- Las filas se generan dinámicamente desde el parámetro "items" -->
+          <tr><td class="empty" colspan="3">Sin comprobantes cargados</td></tr>
+        </tbody>
+      </table>
+
       <!-- Importe total -->
       <div class="importe-row">
         <div class="importe-label-box">Total Pagado</div>
         <div class="importe-value-box" id="campo-importe">$ —</div>
       </div>
 
-
-      <div class="stamp-row">
-        
-      </div>
-
     </div>
 
-    <!-- Pie -->
     <div class="footer">
       Este comprobante es válido como constancia de pago
     </div>
@@ -288,7 +340,7 @@
     // 3. Formatear número como moneda ARS
     function formatearImporte(str) {
       if (!str) return null;
-      const n = parseFloat(str.replace(',', '.'));
+      const n = parseFloat(String(str).replace(',', '.'));
       if (isNaN(n)) return str;
       return n.toLocaleString('es-AR', {
         style: 'currency', currency: 'ARS',
@@ -296,7 +348,42 @@
       });
     }
 
-    // 4. Llenar el comprobante con los datos de la URL
+    // 4. Construir la tabla de comprobantes cancelados
+    // Espera el parámetro "items" como JSON array, por ejemplo:
+    // items=[{"comp":"FC-0001","importe":"50000","saldo":"0"},{"comp":"FC-0002","importe":"100000","saldo":"0"}]
+    function cargarTabla() {
+      const tbody    = document.getElementById('tabla-cancelados');
+      const rawItems = obtenerParam('items');
+
+      if (!rawItems) return; // deja el mensaje "Sin comprobantes cargados"
+
+      let items;
+      try {
+        items = JSON.parse(rawItems);
+      } catch (e) {
+        tbody.innerHTML = '<tr><td class="empty" colspan="3">Error al leer los comprobantes. Verificá el formato del parámetro "items".</td></tr>';
+        return;
+      }
+
+      if (!Array.isArray(items) || items.length === 0) {
+        return; // deja el mensaje por defecto
+      }
+
+      // Genera una fila por cada item
+      tbody.innerHTML = items.map(item => {
+        const comp    = item.comp    || '—';
+        const importe = formatearImporte(item.importe) || '—';
+        const saldo   = formatearImporte(item.saldo)   || '—';
+        return `
+          <tr>
+            <td>${comp}</td>
+            <td class="num">${importe}</td>
+            <td class="num">${saldo}</td>
+          </tr>`;
+      }).join('');
+    }
+
+    // 5. Llenar el comprobante con los datos de la URL
     function completarComprobante() {
       const fecha     = obtenerParam('fecha');
       const proveedor = obtenerParam('proveedor');
@@ -334,32 +421,58 @@
         hayFaltantes = true;
       }
 
-      // Fecha en la franja secundaria
       document.getElementById('subheader-fecha').textContent = formatearFecha(fecha) || '—';
+
+      cargarTabla();
 
       if (hayFaltantes) {
         document.getElementById('aviso-params').style.display = 'block';
       }
     }
 
-    // 5. Generar y descargar el PDF
+    // 6. Generar y descargar el PDF centrado en la hoja
     function descargarPDF() {
       const btn = document.querySelector('.btn-download');
       btn.disabled    = true;
       btn.textContent = 'Generando PDF…';
 
+      const wrapper = document.createElement('div');
+      wrapper.style.cssText = [
+        'width: 794px',
+        'background: #ffffff',
+        'display: flex',
+        'justify-content: center',
+        'align-items: flex-start',
+        'padding: 40px 0',
+        'font-family: Arial, Helvetica, sans-serif',
+      ].join('; ');
+
+      const clone = document.getElementById('comprobante').cloneNode(true);
+      clone.style.width    = '600px';
+      clone.style.maxWidth = '600px';
+      clone.style.flex     = 'none';
+      wrapper.appendChild(clone);
+
+      wrapper.style.position = 'absolute';
+      wrapper.style.left     = '-9999px';
+      wrapper.style.top      = '0';
+      document.body.appendChild(wrapper);
+
+      const nombreArchivo = (obtenerParam('nombre') || 'comprobante-pago') + '.pdf';
+
       html2pdf()
         .set({
-          margin:      [12, 12, 12, 12],
-          filename: (obtenerParam('nombre')) + '.pdf',
+          margin:      0,
+          filename:    nombreArchivo,
           image:       { type: 'jpeg', quality: 0.98 },
-          html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-          jsPDF:       { unit: 'mm', format: 'a4', orientation: 'portrait' },
+          html2canvas: { scale: 2, useCORS: true, backgroundColor: '#ffffff', width: 794 },
+          jsPDF:       { unit: 'px', format: [794, 1123], orientation: 'portrait' },
           pagebreak:   { mode: 'avoid-all' }
         })
-        .from(document.getElementById('comprobante'))
+        .from(wrapper)
         .save()
         .then(() => {
+          document.body.removeChild(wrapper);
           btn.disabled = false;
           btn.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
