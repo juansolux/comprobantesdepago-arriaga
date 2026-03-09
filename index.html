@@ -55,12 +55,13 @@
 
     /* ── HEADER ── */
     .header {
-      background: #25577d;
+      background: #ffffff;
       padding: 24px 36px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 24px;
+      justify-content: flex-start;
+      gap: 20px;
+      border-bottom: 1px solid #e0e0e0;
     }
 
     .logo {
@@ -77,9 +78,9 @@
       object-fit: contain;
     }
 
-    .header-right  { text-align: right; }
-    .company-name  { font-size: 20px; font-weight: bold; color: #fff; letter-spacing: 0.02em; }
-    .company-sub   { font-size: 12px; color: rgba(255,255,255,0.70); margin-top: 4px; }
+    .header-right  { text-align: left; }
+    .company-name  { font-size: 20px; font-weight: bold; color: #25577d; letter-spacing: 0.02em; }
+    .company-sub   { font-size: 12px; color: #25577d; opacity: 0.75; margin-top: 4px; }
 
     /* ── FRANJA SECUNDARIA ── */
     .subheader {
@@ -226,7 +227,9 @@
   <div id="comprobante">
 
     <div class="header">
-      <div class="logo"></div>
+      <div class="logo">
+        <img src="https://i.ibb.co/FbzmC9T8/Arriaga-logo-07.png" alt="Logo Arriaga" />
+      </div>
       <div class="header-right">
         <div class="company-name">Andres Arriaga SRL</div>
         <div class="company-sub">CUIT: 30-71516463-5</div>
