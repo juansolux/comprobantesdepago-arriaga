@@ -123,11 +123,8 @@
       font-size: 13px;
     }
 
-    /* Encabezado de la tabla */
-    .cancelados-table thead tr {
-      background: #25577d;
-    }
-    .cancelados-table thead th {
+    .cancelados-table thead tr   { background: #25577d; }
+    .cancelados-table thead th   {
       color: #fff;
       font-size: 10px;
       font-weight: bold;
@@ -136,39 +133,14 @@
       padding: 10px 14px;
       text-align: left;
     }
-    .cancelados-table thead th:last-child {
-      text-align: right;
-    }
-    .cancelados-table thead th.num {
-      text-align: right;
-    }
+    .cancelados-table thead th.num { text-align: right; }
 
-    /* Filas del cuerpo */
-    .cancelados-table tbody tr {
-      border-bottom: 1px solid #ebebeb;
-    }
-    .cancelados-table tbody tr:last-child {
-      border-bottom: none;
-    }
-    .cancelados-table tbody tr:nth-child(even) {
-      background: #f9fbfd;
-    }
-    .cancelados-table tbody td {
-      padding: 10px 14px;
-      color: #1a1a1a;
-    }
-    .cancelados-table tbody td.num {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    /* Fila vacía (cuando no hay items) */
-    .cancelados-table tbody td.empty {
-      text-align: center;
-      color: #bbb;
-      font-style: italic;
-      padding: 18px 14px;
-    }
+    .cancelados-table tbody tr            { border-bottom: 1px solid #ebebeb; }
+    .cancelados-table tbody tr:last-child { border-bottom: none; }
+    .cancelados-table tbody tr:nth-child(even) { background: #f9fbfd; }
+    .cancelados-table tbody td            { padding: 10px 14px; color: #1a1a1a; }
+    .cancelados-table tbody td.num        { text-align: right; font-variant-numeric: tabular-nums; }
+    .cancelados-table tbody td.empty      { text-align: center; color: #bbb; font-style: italic; padding: 18px 14px; }
 
     /* ── CAJA IMPORTE ── */
     .importe-row       { display: flex; align-items: stretch; border: 1px solid #d0d0d0; }
@@ -240,7 +212,6 @@
     Parámetros esperados: <code>fecha</code>, <code>proveedor</code>, <code>forma</code>, <code>importe</code>, <code>nombre</code>, <code>items</code>.
   </div>
 
-  <!-- Botón de descarga -->
   <button class="btn-download" onclick="descargarPDF()">
     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
          fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -269,7 +240,6 @@
 
     <div class="body">
 
-      <!-- Datos generales -->
       <div class="section-title">Detalle del Pago</div>
 
       <table class="data-table">
@@ -287,24 +257,21 @@
         </tr>
       </table>
 
-      <!-- Comprobantes cancelados -->
       <div class="section-title">Comprobantes Cancelados</div>
 
       <table class="cancelados-table">
         <thead>
           <tr>
             <th>Comprobante</th>
+            <th>Fecha Comprobante</th>
             <th class="num">Importe</th>
-            <th class="num">Saldo</th>
           </tr>
         </thead>
         <tbody id="tabla-cancelados">
-          <!-- Las filas se generan dinámicamente desde el parámetro "items" -->
           <tr><td class="empty" colspan="3">Sin comprobantes cargados</td></tr>
         </tbody>
       </table>
 
-      <!-- Importe total -->
       <div class="importe-row">
         <div class="importe-label-box">Total Pagado</div>
         <div class="importe-value-box" id="campo-importe">$ —</div>
@@ -349,13 +316,13 @@
     }
 
     // 4. Construir la tabla de comprobantes cancelados
-    // Espera el parámetro "items" como JSON array, por ejemplo:
-    // items=[{"comp":"FC-0001","importe":"50000","saldo":"0"},{"comp":"FC-0002","importe":"100000","saldo":"0"}]
+    // Parámetro "items" como JSON array:
+    // [{"comp":"FC-0001","fecha":"2026-02-01","importe":"50000"},{"comp":"FC-0002","fecha":"2026-02-15","importe":"100000"}]
     function cargarTabla() {
       const tbody    = document.getElementById('tabla-cancelados');
       const rawItems = obtenerParam('items');
 
-      if (!rawItems) return; // deja el mensaje "Sin comprobantes cargados"
+      if (!rawItems) return;
 
       let items;
       try {
@@ -365,20 +332,17 @@
         return;
       }
 
-      if (!Array.isArray(items) || items.length === 0) {
-        return; // deja el mensaje por defecto
-      }
+      if (!Array.isArray(items) || items.length === 0) return;
 
-      // Genera una fila por cada item
       tbody.innerHTML = items.map(item => {
-        const comp    = item.comp    || '—';
-        const importe = formatearImporte(item.importe) || '—';
-        const saldo   = formatearImporte(item.saldo)   || '—';
+        const comp    = item.comp                          || '—';
+        const fecha   = formatearFecha(item.fecha)         || '—';
+        const importe = formatearImporte(item.importe)     || '—';
         return `
           <tr>
             <td>${comp}</td>
+            <td>${fecha}</td>
             <td class="num">${importe}</td>
-            <td class="num">${saldo}</td>
           </tr>`;
       }).join('');
     }
