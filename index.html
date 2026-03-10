@@ -56,7 +56,7 @@
     /* ── HEADER ── */
     .header {
       background: #ffffff;
-      padding: 20px 28px;
+      padding: 20px 24px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -284,6 +284,7 @@
     </div>
 
     <div class="footer">
+      Este comprobante es válido como constancia de pago
     </div>
 
   </div>
@@ -297,14 +298,19 @@
       return (valor !== null && valor.trim() !== '') ? valor.trim() : null;
     }
 
-    // 2. Convertir "YYYY-MM-DD" → "DD/MM/YYYY"
+    // 2. Convertir cualquier formato de fecha a DD/MM/YYYY
+    // Acepta: YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY
     function formatearFecha(str) {
       if (!str) return null;
-      if (str.includes('-')) {
-        const [a, m, d] = str.split('-');
-        return `${d}/${m}/${a}`;
+      const sep    = str.includes('-') ? '-' : '/';
+      const partes = str.split(sep);
+      if (partes.length !== 3) return str;
+      // Si el primer segmento tiene 4 dígitos → viene como YYYY-sep-MM-sep-DD
+      if (partes[0].length === 4) {
+        return `${partes[2]}/${partes[1]}/${partes[0]}`;
       }
-      return str;
+      // Ya viene como DD-sep-MM-sep-YYYY
+      return `${partes[0]}/${partes[1]}/${partes[2]}`;
     }
 
     // 3. Formatear número como moneda ARS
