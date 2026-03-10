@@ -298,20 +298,7 @@
       return (valor !== null && valor.trim() !== '') ? valor.trim() : null;
     }
 
-    // 2. Convertir cualquier formato de fecha a DD/MM/YYYY
-    // Acepta: YYYY-MM-DD, YYYY/MM/DD, DD-MM-YYYY, DD/MM/YYYY
-    function formatearFecha(str) {
-      if (!str) return null;
-      const sep    = str.includes('-') ? '-' : '/';
-      const partes = str.split(sep);
-      if (partes.length !== 3) return str;
-      // Si el primer segmento tiene 4 dígitos → viene como YYYY-sep-MM-sep-DD
-      if (partes[0].length === 4) {
-        return `${partes[2]}/${partes[1]}/${partes[0]}`;
-      }
-      // Ya viene como DD-sep-MM-sep-YYYY
-      return `${partes[0]}/${partes[1]}/${partes[2]}`;
-    }
+    // 2. La fecha se usa tal como viene en la URL, sin transformación
 
     // 3. Formatear número como moneda ARS
     function formatearImporte(str) {
@@ -345,7 +332,7 @@
 
       tbody.innerHTML = items.map(item => {
         const comp    = item.comp                          || '—';
-        const fecha   = formatearFecha(item.fecha)         || '—';
+        const fecha   = item.fecha         || '—';
         const importe = formatearImporte(item.importe)     || '—';
         return `
           <tr>
@@ -377,7 +364,7 @@
         }
       }
 
-      escribir('campo-fecha',     formatearFecha(fecha));
+      escribir('campo-fecha',     fecha);
       escribir('campo-proveedor', proveedor);
       escribir('campo-forma',     forma);
 
@@ -394,7 +381,7 @@
         hayFaltantes = true;
       }
 
-      document.getElementById('subheader-fecha').textContent = formatearFecha(fecha) || '—';
+      document.getElementById('subheader-fecha').textContent = fecha || '—';
 
       cargarTabla();
 
