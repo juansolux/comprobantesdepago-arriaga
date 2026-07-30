@@ -218,7 +218,7 @@
 
   <div id="aviso-params">
     ⚠️ Algunos campos no se recibieron en la URL y se muestran como "No especificado".
-    Parámetros esperados: <code>fecha</code>, <code>proveedor</code>, <code>forma</code>, <code>importe</code>, <code>nombre</code>, <code>items</code>, <code>cheques</code>.
+    Parámetros esperados: <code>fecha</code>, <code>proveedor</code>, <code>forma</code>, <code>importe</code>, <code>nombre</code>, <code>items</code>, <code>chequesPropios</code>, <code>chequesTerceros</code>.
   </div>
 
   <button class="btn-download" onclick="descargarPDF()">
@@ -366,26 +366,41 @@
       }).join('');
     }
 
-    // 4b. Construir la sección/tabla de cheques entregados (solo si el parámetro viene con datos)
-    // Parámetro "cheques" como JSON array:
+    // 4b. Construir la sección/tabla de cheques entregados (solo si hay datos)
+    // Parámetros "chequesPropios" y "chequesTerceros", cada uno como JSON array:
     // [{"banco":"Banco Nación","numero":"00012345","vencimiento":"2026-08-15","importe":"50000"}]
-    function cargarCheques() {
-      const seccion    = document.getElementById('seccion-cheques');
-      const tbody      = document.getElementById('tabla-cheques');
-      const rawCheques = obtenerParam('cheques');
-
-      if (!rawCheques) return;
-
-      let cheques;
+    // Se combinan en una sola tabla, sin distinguir el origen.
+    function parsearCheques(raw) {
+      if (!raw) return { lista: [], error: false };
       try {
-        cheques = JSON.parse(rawCheques);
+        const parsed = JSON.parse(raw);
+        return { lista: Array.isArray(parsed) ? parsed : [], error: false };
       } catch (e) {
+        return { lista: [], error: true };
+      }
+    }
+
+    function cargarCheques() {
+      const seccion = document.getElementById('seccion-cheques');
+      const tbody   = document.getElementById('tabla-cheques');
+
+      const rawPropios   = obtenerParam('chequesPropios');
+      const rawTerceros  = obtenerParam('chequesTerceros');
+
+      if (!rawPropios && !rawTerceros) return;
+
+      const propios  = parsearCheques(rawPropios);
+      const terceros = parsearCheques(rawTerceros);
+
+      if (propios.error || terceros.error) {
         seccion.style.display = 'block';
-        tbody.innerHTML = '<tr><td class="empty" colspan="4">Error al leer los cheques. Verificá el formato del parámetro "cheques".</td></tr>';
+        tbody.innerHTML = '<tr><td class="empty" colspan="4">Error al leer los cheques. Verificá el formato de los parámetros "chequesPropios"/"chequesTerceros".</td></tr>';
         return;
       }
 
-      if (!Array.isArray(cheques) || cheques.length === 0) return;
+      const cheques = [...propios.lista, ...terceros.lista];
+
+      if (cheques.length === 0) return;
 
       seccion.style.display = 'block';
       tbody.innerHTML = cheques.map(cheque => {
