@@ -21,7 +21,7 @@
       align-items: center;
       justify-content: center;
       min-height: 100vh;
-      padding: 40px 16px;
+      padding: 28px 16px;
     }
 
     /* ── BOTÓN DESCARGA ── */
@@ -33,12 +33,12 @@
       color: #fff;
       border: none;
       border-radius: 4px;
-      padding: 11px 28px;
+      padding: 10px 26px;
       font-family: Arial, Helvetica, sans-serif;
       font-size: 14px;
       font-weight: bold;
       cursor: pointer;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
       letter-spacing: 0.03em;
       transition: background 0.2s;
     }
@@ -56,7 +56,7 @@
     /* ── HEADER ── */
     .header {
       background: #ffffff;
-      padding: 20px 24px;
+      padding: 16px 28px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
@@ -65,8 +65,8 @@
     }
 
     .logo {
-      width: 120px;
-      height: 60px;
+      width: 100px;
+      height: 48px;
       flex-shrink: 0;
       display: flex;
       align-items: center;
@@ -86,7 +86,7 @@
     /* ── FRANJA SECUNDARIA ── */
     .subheader {
       background: #1a3f5c;
-      padding: 8px 36px;
+      padding: 7px 28px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -95,7 +95,7 @@
     .subheader strong { font-size: 11px; color: #fff; letter-spacing: 0.04em; }
 
     /* ── CUERPO ── */
-    .body { padding: 32px 36px 28px; }
+    .body { padding: 22px 28px 20px; }
 
     .section-title {
       font-size: 10px;
@@ -104,15 +104,15 @@
       text-transform: uppercase;
       color: #25577d;
       border-bottom: 2px solid #25577d;
-      padding-bottom: 6px;
-      margin-bottom: 18px;
+      padding-bottom: 5px;
+      margin-bottom: 12px;
     }
 
     /* ── TABLA DATOS GENERALES ── */
-    .data-table               { width: 100%; border-collapse: collapse; margin-bottom: 28px; }
+    .data-table               { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
     .data-table tr            { border-bottom: 1px solid #ebebeb; }
     .data-table tr:last-child { border-bottom: none; }
-    .data-table td            { padding: 11px 0; font-size: 14px; }
+    .data-table td            { padding: 8px 0; font-size: 14px; }
     .data-table td.label      { color: #888; width: 40%; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; }
     .data-table td.value      { color: #1a1a1a; font-weight: bold; }
     .data-table td.value.missing { color: #bbb; font-weight: normal; font-style: italic; }
@@ -121,7 +121,7 @@
     .cancelados-table {
       width: 100%;
       border-collapse: collapse;
-      margin-bottom: 28px;
+      margin-bottom: 20px;
       font-size: 13px;
     }
 
@@ -132,7 +132,7 @@
       font-weight: bold;
       letter-spacing: 0.10em;
       text-transform: uppercase;
-      padding: 10px 14px;
+      padding: 8px 12px;
       text-align: left;
     }
     .cancelados-table thead th.num { text-align: right; }
@@ -140,9 +140,9 @@
     .cancelados-table tbody tr            { border-bottom: 1px solid #ebebeb; }
     .cancelados-table tbody tr:last-child { border-bottom: none; }
     .cancelados-table tbody tr:nth-child(even) { background: #f9fbfd; }
-    .cancelados-table tbody td            { padding: 10px 14px; color: #1a1a1a; }
+    .cancelados-table tbody td            { padding: 8px 12px; color: #1a1a1a; }
     .cancelados-table tbody td.num        { text-align: right; font-variant-numeric: tabular-nums; }
-    .cancelados-table tbody td.empty      { text-align: center; color: #bbb; font-style: italic; padding: 18px 14px; }
+    .cancelados-table tbody td.empty      { text-align: center; color: #bbb; font-style: italic; padding: 14px 12px; }
 
     /* ── TABLA CHEQUES ENTREGADOS (más espacio para Banco Emisor) ── */
     .cheques-table                                { table-layout: fixed; }
@@ -160,14 +160,14 @@
       font-weight: bold;
       letter-spacing: 0.10em;
       text-transform: uppercase;
-      padding: 14px 20px;
+      padding: 12px 18px;
       display: flex;
       align-items: center;
       min-width: 140px;
     }
     .importe-value-box {
       flex: 1;
-      padding: 14px 20px;
+      padding: 12px 18px;
       font-size: 24px;
       font-weight: bold;
       color: #25577d;
@@ -180,7 +180,7 @@
     .footer {
       background: #f7f7f7;
       border-top: 1px solid #e0e0e0;
-      padding: 12px 36px;
+      padding: 10px 28px;
       font-size: 10px;
       color: #aaa;
       text-align: center;
@@ -204,13 +204,13 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 480px) {
-      .header            { padding: 20px; flex-direction: column; align-items: flex-start; }
+      .header            { padding: 16px 20px; flex-direction: column; align-items: flex-start; }
       .header-right      { text-align: left; }
-      .subheader         { padding: 8px 20px; }
-      .body              { padding: 24px 20px; }
-      .importe-label-box { min-width: 110px; font-size: 10px; padding: 12px 14px; }
-      .importe-value-box { font-size: 20px; padding: 12px 14px; }
-      .footer            { padding: 12px 20px; }
+      .subheader         { padding: 7px 20px; }
+      .body              { padding: 18px 20px; }
+      .importe-label-box { min-width: 110px; font-size: 10px; padding: 10px 14px; }
+      .importe-value-box { font-size: 20px; padding: 10px 14px; }
+      .footer            { padding: 10px 20px; }
     }
   </style>
 </head>
@@ -284,20 +284,20 @@
         </table>
       </div>
 
-      <div class="section-title">Comprobantes Cancelados</div>
+      <div id="seccion-cancelados" style="display: none;">
+        <div class="section-title">Comprobantes Cancelados</div>
 
-      <table class="cancelados-table">
-        <thead>
-          <tr>
-            <th>Comprobante</th>
-            <th>Fecha Comprobante</th>
-            <th class="num">Importe</th>
-          </tr>
-        </thead>
-        <tbody id="tabla-cancelados">
-          <tr><td class="empty" colspan="3">Sin comprobantes cargados</td></tr>
-        </tbody>
-      </table>
+        <table class="cancelados-table">
+          <thead>
+            <tr>
+              <th>Comprobante</th>
+              <th>Fecha Comprobante</th>
+              <th class="num">Importe</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-cancelados"></tbody>
+        </table>
+      </div>
 
       <div class="importe-row">
         <div class="importe-label-box">Total Pagado</div>
@@ -338,6 +338,7 @@
     // Parámetro "items" como JSON array:
     // [{"comp":"FC-0001","fecha":"2026-02-01","importe":"50000"},{"comp":"FC-0002","fecha":"2026-02-15","importe":"100000"}]
     function cargarTabla() {
+      const seccion  = document.getElementById('seccion-cancelados');
       const tbody    = document.getElementById('tabla-cancelados');
       const rawItems = obtenerParam('items');
 
@@ -347,12 +348,14 @@
       try {
         items = JSON.parse(rawItems);
       } catch (e) {
+        seccion.style.display = 'block';
         tbody.innerHTML = '<tr><td class="empty" colspan="3">Error al leer los comprobantes. Verificá el formato del parámetro "items".</td></tr>';
         return;
       }
 
       if (!Array.isArray(items) || items.length === 0) return;
 
+      seccion.style.display = 'block';
       tbody.innerHTML = items.map(item => {
         const comp    = item.comp                          || '—';
         const fecha   = item.fecha         || '—';
