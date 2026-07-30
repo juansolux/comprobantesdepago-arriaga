@@ -144,6 +144,13 @@
     .cancelados-table tbody td.num        { text-align: right; font-variant-numeric: tabular-nums; }
     .cancelados-table tbody td.empty      { text-align: center; color: #bbb; font-style: italic; padding: 18px 14px; }
 
+    /* ── TABLA CHEQUES ENTREGADOS (más espacio para Banco Emisor) ── */
+    .cheques-table                                { table-layout: fixed; }
+    .cheques-table th:nth-child(1), .cheques-table td:nth-child(1) { width: 34%; }
+    .cheques-table th:nth-child(2), .cheques-table td:nth-child(2) { width: 20%; }
+    .cheques-table th:nth-child(3), .cheques-table td:nth-child(3) { width: 22%; }
+    .cheques-table th:nth-child(4), .cheques-table td:nth-child(4) { width: 24%; }
+
     /* ── CAJA IMPORTE ── */
     .importe-row       { display: flex; align-items: stretch; border: 1px solid #d0d0d0; }
     .importe-label-box {
@@ -264,7 +271,7 @@
       <div id="seccion-cheques" style="display: none;">
         <div class="section-title">Cheques Entregados</div>
 
-        <table class="cancelados-table">
+        <table class="cancelados-table cheques-table">
           <thead>
             <tr>
               <th>Banco Emisor</th>
