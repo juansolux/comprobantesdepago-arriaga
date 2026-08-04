@@ -418,7 +418,7 @@
       tbody.innerHTML = cheques.map(cheque => {
         const banco       = cheque.banco       || '—';
         const numero      = cheque.numero      || '—';
-        const vencimiento = cheque.vencimiento  || '—';
+        const vencimiento = invertirFecha(cheque.vencimiento) || '—';
         const importe     = formatearImporte(cheque.importe) || '—';
         return `
           <tr>
