@@ -321,7 +321,16 @@
       return (valor !== null && valor.trim() !== '') ? valor.trim() : null;
     }
 
-    // 2. La fecha se usa tal como viene en la URL, sin transformación
+    // 2. La fecha principal se usa tal como viene en la URL, sin transformación.
+    // AppSheet arma las fechas de los comprobantes como M/D/AAAA (formato US);
+    // esta función las invierte a D/M/AAAA para mostrarlas como en Argentina.
+    function invertirFecha(str) {
+      if (!str) return str;
+      const m = String(str).trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/);
+      if (!m) return str;
+      const [, mes, dia, anio] = m;
+      return `${dia}/${mes}/${anio}`;
+    }
 
     // 3. Formatear número como moneda ARS
     function formatearImporte(str) {
@@ -358,7 +367,7 @@
       seccion.style.display = 'block';
       tbody.innerHTML = items.map(item => {
         const comp    = item.comp                          || '—';
-        const fecha   = item.fecha         || '—';
+        const fecha   = invertirFecha(item.fecha)          || '—';
         const importe = formatearImporte(item.importe)     || '—';
         return `
           <tr>
