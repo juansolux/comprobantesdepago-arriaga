@@ -218,7 +218,7 @@
 
   <div id="aviso-params">
     ⚠️ Algunos campos no se recibieron en la URL y se muestran como "No especificado".
-    Parámetros esperados: <code>fecha</code>, <code>proveedor</code>, <code>forma</code>, <code>importe</code>, <code>nombre</code>, <code>items</code>, <code>chequesPropios</code>, <code>chequesTerceros</code>.
+    Parámetros esperados: <code>fecha</code>, <code>proveedor</code>, <code>efectivo</code>, <code>transferencia</code>, <code>cheques</code>, <code>importe</code>, <code>nombre</code>, <code>items</code>, <code>chequesPropios</code>, <code>chequesTerceros</code>.
   </div>
 
   <button class="btn-download" onclick="descargarPDF()">
@@ -262,9 +262,17 @@
           <td class="label">Proveedor</td>
           <td class="value" id="campo-proveedor">—</td>
         </tr>
-        <tr>
-          <td class="label">Forma de pago</td>
-          <td class="value" id="campo-forma">—</td>
+        <tr id="fila-efectivo" style="display: none;">
+          <td class="label">Efectivo</td>
+          <td class="value" id="campo-efectivo"></td>
+        </tr>
+        <tr id="fila-transferencia" style="display: none;">
+          <td class="label">Transferencia</td>
+          <td class="value" id="campo-transferencia"></td>
+        </tr>
+        <tr id="fila-cheques" style="display: none;">
+          <td class="label">Cheques</td>
+          <td class="value" id="campo-cheques"></td>
         </tr>
       </table>
 
@@ -432,10 +440,12 @@
 
     // 5. Llenar el comprobante con los datos de la URL
     function completarComprobante() {
-      const fecha     = obtenerParam('fecha');
-      const proveedor = obtenerParam('proveedor');
-      const forma     = obtenerParam('forma');
-      const importe   = obtenerParam('importe');
+      const fecha          = obtenerParam('fecha');
+      const proveedor      = obtenerParam('proveedor');
+      const efectivo       = obtenerParam('efectivo');
+      const transferencia  = obtenerParam('transferencia');
+      const cheques        = obtenerParam('cheques');
+      const importe        = obtenerParam('importe');
 
       let hayFaltantes = false;
 
@@ -451,9 +461,26 @@
         }
       }
 
+      // Muestra la fila de un medio de pago solo si trae un monto; devuelve
+      // true si se mostró, para saber si al menos uno de los tres vino.
+      function escribirMedioPago(prefijo, valor) {
+        const fila       = document.getElementById(`fila-${prefijo}`);
+        const campo      = document.getElementById(`campo-${prefijo}`);
+        const formateado = formatearImporte(valor);
+        if (!formateado) return false;
+        fila.style.display = '';
+        campo.textContent  = formateado;
+        return true;
+      }
+
       escribir('campo-fecha',     fecha);
       escribir('campo-proveedor', proveedor);
-      escribir('campo-forma',     forma);
+
+      const huboEfectivo      = escribirMedioPago('efectivo', efectivo);
+      const huboTransferencia = escribirMedioPago('transferencia', transferencia);
+      const huboCheques       = escribirMedioPago('cheques', cheques);
+
+      if (!huboEfectivo && !huboTransferencia && !huboCheques) hayFaltantes = true;
 
       const impFormatado = formatearImporte(importe);
       const elImp = document.getElementById('campo-importe');
